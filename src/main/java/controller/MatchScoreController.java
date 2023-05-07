@@ -6,11 +6,11 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "MatchScoreController", value = "/new-match")
+@WebServlet(name = "MatchScore", value = "/match-score")
 public class MatchScoreController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Hello");
+        response.getWriter().println(request.getParameter("uuid"));
     }
 
     @Override

@@ -10,8 +10,7 @@
   <listener>
     <listener-class>util.HibernateUtil</listener-class>
   </listener>
-  <servlet-mapping>
-    <servlet-name>TestServlet</servlet-name>
-    <url-pattern/>
-  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
 </web-app>
