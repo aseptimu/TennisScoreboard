@@ -21,7 +21,6 @@ public class NewMatchController extends HttpServlet {
         String player2 = request.getParameter("player2");
         OngoingMatchesService service = new OngoingMatchesService();
         UUID uuid = service.newMatch(player1, player2);
-        System.out.println("context path: " + request.getContextPath());
         response.sendRedirect("/match-score?uuid=" + uuid);
     }
 }
