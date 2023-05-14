@@ -9,9 +9,10 @@ import model.Player;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class OngoingMatchesService {
-    Map<UUID, Match> currentMatches = new HashMap<>();
+    private static final Map<UUID, Match> currentMatches = new ConcurrentHashMap<>();
     public UUID newMatch(String player1Name, String player2Name) {
         PlayersDAO playersDAO = new PlayersDAO();
         Player player1 = playersDAO.addPlayer(player1Name);
@@ -20,6 +21,10 @@ public class OngoingMatchesService {
         UUID uuid = UUID.randomUUID();
         currentMatches.put(uuid, matches);
         return uuid;
+    }
+
+    public Match getMatch(UUID uuid) {
+        return currentMatches.get(uuid);
     }
 
     public Match getMatch(UUID uuid, String winner) {

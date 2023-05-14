@@ -15,7 +15,11 @@ import java.util.UUID;
 public class MatchScoreController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().println(request.getParameter("uuid"));
+        String uuid = request.getParameter("uuid");
+        OngoingMatchesService matchesService = new OngoingMatchesService();
+        Match match = matchesService.getMatch(UUID.fromString(uuid));
+        request.setAttribute("match", match);
+        request.getRequestDispatcher("match-score.jsp").forward(request, response);
     }
 
     @Override
