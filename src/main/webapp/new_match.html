@@ -1,17 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Форма регистрации</title>
+    <style>
+        .registration-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+        }
+
+        .registration-form h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .registration-form input[type="text"],
+        .registration-form input[type="email"],
+        .registration-form input[type="password"] {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .registration-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .registration-form button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Новый матч</h1>
+<div class="registration-form">
+    <h2>Введите имена игроков</h2>
     <form action="/new-match" method="post">
-        <label for="player1">Имя игрока 1:</label>
-        <input type="text" id="player1" name="player1"><br><br>
-        <label for="player2">Имя игрока 2:</label>
-        <input type="text" id="player2" name="player2"><br><br>
-        <input type="submit" value="Начать">
+        <input type="text" name="player1" placeholder="Игрок 1" required>
+        <input type="text" name="player2" placeholder="Игрок 2" required>
+        <button type="submit">Начать</button>
     </form>
+</div>
 </body>
 </html>

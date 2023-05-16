@@ -9,18 +9,16 @@ import util.HibernateUtil;
 import java.util.List;
 
 public class PlayersDAO {
-    public Player addPlayer(String name) {
+    public Player addPlayer(Player player) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         String hql = "FROM Player WHERE name= :name";
         Query<Player> query = session.createQuery(hql, Player.class);
-        query.setParameter("name", name);
-        Player player = query.uniqueResult();
-        if (player == null) {
-            player = new Player();
-            player.setName(name);
-            session.persist(player);//TODO: save in the end of match
+        query.setParameter("name", player.getName());
+        Player presentedPlayer = query.uniqueResult();
+        if (presentedPlayer == null) {
+            session.persist(player);
         }
         session.getTransaction().commit();
         return player;

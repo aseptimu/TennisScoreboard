@@ -8,8 +8,9 @@ import lombok.Data;
 @Data
 public class Player {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     private String name;
+
 }
