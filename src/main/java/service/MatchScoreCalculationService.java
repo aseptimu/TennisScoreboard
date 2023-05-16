@@ -7,12 +7,18 @@ import dto.score.Scorer;
 
 public class MatchScoreCalculationService {
 
-    public void calculate(Match match) {//TODO: setWinner earlier. Here we should know who is winner
+    public void calculate(Match match) {
         Score winner = match.getWinner() == Scorer.FIRST_PLAYER ?
                 match.getFirstPlayerScore() : match.getSecondPlayerScore();
         Score looser = match.getWinner() == Scorer.FIRST_PLAYER ?
                 match.getSecondPlayerScore() : match.getFirstPlayerScore();
 
+        if (match.getStage() == GameStage.PLAYER_WON) {
+            return;
+        }
+        if (match.getStage() == GameStage.GAME_WON || match.getStage() == GameStage.SET_WON) {
+            match.setStage(GameStage.POINT);
+        }
         if (match.getStage() == GameStage.TIE_BREAK) {
             calculateTieBreak(winner, match);
         } else {
@@ -32,9 +38,8 @@ public class MatchScoreCalculationService {
     private void calculateSet(Score winner, Match match) {
         if (winner.getSet() == Score.LAST_SET - 1) {
             match.setStage(GameStage.PLAYER_WON);
-        } else {
-            winner.wonSet();
         }
+        winner.wonSet();
     }
 
     private void calculateTieBreak(Score winner, Match match) {
@@ -51,6 +56,7 @@ public class MatchScoreCalculationService {
         } else if (winner.getGame() == Score.LAST_GAME - 1 && looser.getGame() <= Score.LAST_GAME - 2) {
             match.setStage(GameStage.SET_WON);
         } else if (winner.getGame() == Score.LAST_GAME - 1 && looser.getGame() == Score.LAST_GAME) {
+            winner.wonGame();
             match.setStage(GameStage.TIE_BREAK);
         } else {
             winner.wonGame();
@@ -62,7 +68,9 @@ public class MatchScoreCalculationService {
             winner.setPoint(Score.Point.GAME);
             match.setStage(GameStage.GAME_WON);
         } else {
-            winner.wonPoint();
+            if (looser.getPoint() != Score.Point.ADVANTAGE) {
+                winner.wonPoint();
+            }
             if (looser.getPoint() == Score.Point.ADVANTAGE) {
                 looser.setPoint(Score.Point.FORTY);
             }

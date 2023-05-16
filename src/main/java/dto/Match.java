@@ -7,9 +7,12 @@ import dto.score.GameStage;
 import dto.score.Scorer;
 import model.Player;
 
+import java.util.UUID;
+
 @Getter
 public class Match {
-    //    private Match match;
+    @Setter
+    private UUID uuid;
     @Setter
     private Player player1;
     @Setter
@@ -42,6 +45,7 @@ public class Match {
     }
 
     public Match(Player player1, Player player2) {
+        this.uuid = UUID.randomUUID();
         this.player1 = player1;
         this.player2 = player2;
     }

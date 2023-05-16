@@ -32,5 +32,6 @@ public class MatchScoreController extends HttpServlet {
         calculation.calculate(match);
         FinishedMatchesPersistenceService persistence = new FinishedMatchesPersistenceService();
         persistence.persist(match);
+        response.sendRedirect("/match-score?uuid=" + matchUUID);
     }
 }

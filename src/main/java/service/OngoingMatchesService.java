@@ -3,10 +3,8 @@ package service;
 import dao.PlayersDAO;
 import dto.Match;
 import dto.score.Scorer;
-import model.Matches;
 import model.Player;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,9 +15,9 @@ public class OngoingMatchesService {
         PlayersDAO playersDAO = new PlayersDAO();
         Player player1 = playersDAO.addPlayer(player1Name);
         Player player2 = playersDAO.addPlayer(player2Name);
-        Match matches = new Match(player1, player2);
-        UUID uuid = UUID.randomUUID();
-        currentMatches.put(uuid, matches);
+        Match match = new Match(player1, player2);
+        UUID uuid = match.getUuid();
+        currentMatches.put(uuid, match);
         return uuid;
     }
 
