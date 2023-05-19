@@ -1,4 +1,4 @@
-package model;
+package entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,13 +20,9 @@ public class Matches {
     @JoinColumn(name = "Winner")
     private Player winner;
 
-    @Transient
-    private int score;
-
     public Matches(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
-        score = 0;
     }
 
     public Matches() {

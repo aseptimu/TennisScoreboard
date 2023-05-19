@@ -1,5 +1,6 @@
 package controller;
 
+import dao.MatchDAO;
 import dto.Match;
 import dto.score.GameStage;
 import jakarta.servlet.*;
@@ -15,32 +16,37 @@ import java.util.UUID;
 
 @WebServlet(name = "MatchScore", value = "/match-score")
 public class MatchScoreController extends HttpServlet {
+    OngoingMatchesService matchesService = new OngoingMatchesService();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
         if (uuid == null) {
-            System.err.println("error");
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            request.getRequestDispatcher("/errors/404.html").forward(request, response);
             return;
-        }//TODO: error
-        OngoingMatchesService matchesService = new OngoingMatchesService();
+        }
         Optional<Match> match = matchesService.getMatch(UUID.fromString(uuid));
         if (match.isEmpty()) {
-            //TODO: берём из базы финальный счёт
+            match = Optional.ofNullable(matchesService.getFinishedMatch());
+            if (match.isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                request.getRequestDispatcher("/errors/404.html").forward(request, response);
+                return;
+            }
         }
-        request.setAttribute("match", match);
+        request.setAttribute("match", match.get());
         request.getRequestDispatcher("match-score.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        OngoingMatchesService ongoingService = new OngoingMatchesService();
-        UUID matchUUID = UUID.fromString(request.getParameter("uuid"));
+        UUID matchUUID = UUID.fromString(request.getParameter("uuid"));//TODO: empty/invalid UUID
         String winner = request.getParameter("winner");
-        Match match = ongoingService.getMatch(matchUUID, winner);
+        Match match = matchesService.getMatch(matchUUID, winner);
         MatchScoreCalculationService calculation = new MatchScoreCalculationService();
         calculation.calculate(match);
         if (match.getStage() == GameStage.PLAYER_WON) {
-            ongoingService.remove(matchUUID);
+            matchesService.remove(matchUUID);
             FinishedMatchesPersistenceService persistence = new FinishedMatchesPersistenceService();
             persistence.persist(match);
         }

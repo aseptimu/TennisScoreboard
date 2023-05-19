@@ -2,7 +2,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Таблица матча</title>
@@ -113,7 +113,10 @@
         <c:choose>
             <c:when test="${match.stage eq 'PLAYER_WON'}">
                 <p style="color: #93d900; font-size: 20px;">
-                    Игрок <span style="font-weight: bold;"><c:out value="${winner.name}"/></span> победил!
+                    Игрок <span style="font-weight: bold;"><c:out value="${winner.name}"/></span> победил!<br/>
+                    <a href="/new-match">Создать новый матч</a><br/>
+                    <a href="/">На главную</a>
+
                 </p>
             </c:when>
             <c:otherwise>

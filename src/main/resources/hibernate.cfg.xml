@@ -16,7 +16,7 @@
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.format_sql">true</property>
     <property name="hibernate.current_session_context_class">thread</property>
-    <mapping class="model.Player"/>
-    <mapping class="model.Matches"/>
+    <mapping class="entities.Player"/>
+    <mapping class="entities.Matches"/>
   </session-factory>
 </hibernate-configuration>

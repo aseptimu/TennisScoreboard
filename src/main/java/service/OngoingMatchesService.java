@@ -1,9 +1,9 @@
 package service;
 
-import dao.PlayersDAO;
 import dto.Match;
 import dto.score.Scorer;
-import model.Player;
+import lombok.Getter;
+import entities.Player;
 
 import java.util.Map;
 import java.util.Optional;
@@ -12,8 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class OngoingMatchesService {
     private static final Map<UUID, Match> currentMatches = new ConcurrentHashMap<>();
+    @Getter
+    private Match finishedMatch;
     public UUID newMatch(String player1Name, String player2Name) {
-        PlayersDAO playersDAO = new PlayersDAO();
         Player player1 = new Player();
         player1.setName(player1Name);
         Player player2 = new Player();
@@ -25,7 +26,7 @@ public class OngoingMatchesService {
     }
 
     public Optional<Match> getMatch(UUID uuid) {
-        return Optional.of(currentMatches.get(uuid));
+        return Optional.ofNullable(currentMatches.get(uuid));
     }
 
     public Match getMatch(UUID uuid, String winner) {
@@ -39,7 +40,7 @@ public class OngoingMatchesService {
     }
 
     public void remove(UUID uuid) {
-        currentMatches.remove(uuid);
+        finishedMatch = currentMatches.remove(uuid);
     }
 }
 

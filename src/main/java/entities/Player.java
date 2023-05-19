@@ -1,4 +1,4 @@
-package model;
+package entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,9 +8,10 @@ import lombok.Data;
 @Data
 public class Player {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(unique = true)
     private String name;
 
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import dto.score.GameStage;
 import dto.score.Scorer;
-import model.Player;
+import entities.Player;
 
 import java.util.UUID;
 
@@ -20,7 +20,7 @@ public class Match {
     private final Score firstPlayerScore = new Score();
     private final Score secondPlayerScore = new Score();
     @Setter
-    private Scorer winner;
+    private Scorer winner = Scorer.FIRST_PLAYER;
     @Setter
     private GameStage stage = GameStage.POINT;
 

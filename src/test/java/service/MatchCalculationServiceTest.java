@@ -94,4 +94,5 @@ class MatchCalculationServiceTest {
         Assertions.assertEquals(1, match.getFirstPlayerScore().getSet());
         Assertions.assertEquals(0, match.getSecondPlayerScore().getSet());
     }
+
 }
