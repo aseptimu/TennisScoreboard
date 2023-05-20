@@ -36,7 +36,7 @@
   <form id="filterForm" action="/matches" method="get">
     <label style="color: #93d900" for="playerName">Фильтр по имени игрока:</label>
     <input type="text" id="playerName" name="filter_by_player_name">
-    <button type="submit">Искать</button>
+    <button type="submit">искать</button>
   </form>
 </div>
 
@@ -66,9 +66,11 @@
     </tr>
   </c:forEach>
 </table>
-<div style="display: flex; justify-content: center; align-items: center;">
-  <a href="/matches?page=${page - 1}">< Предыдущая</a>&nbsp&nbsp&nbsp&nbsp
-  <a href="/matches?page=${page + 1}">Следующая ></a>
-</div>
+<c:if test="${not empty matches && matches.size() > 5}">
+  <div style="display: flex; justify-content: center; align-items: center;">
+    <a href="/matches?page=${page - 1}">< Предыдущая</a>&nbsp&nbsp&nbsp&nbsp
+    <a href="/matches?page=${page + 1}">Следующая ></a>
+  </div>
+</c:if>
 </body>
 </html>

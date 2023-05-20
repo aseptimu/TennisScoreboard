@@ -1,6 +1,5 @@
 package controller;
 
-import dao.MatchDAO;
 import dto.Match;
 import dto.score.GameStage;
 import jakarta.servlet.*;
@@ -19,18 +18,27 @@ public class MatchScoreController extends HttpServlet {
     OngoingMatchesService matchesService = new OngoingMatchesService();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String uuid = request.getParameter("uuid");
-        if (uuid == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            request.getRequestDispatcher("/errors/404.html").forward(request, response);
+        String uuidString = request.getParameter("uuid");
+        if (uuidString == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            request.getRequestDispatcher("/errors/400.html").forward(request, response);
             return;
         }
-        Optional<Match> match = matchesService.getMatch(UUID.fromString(uuid));
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(uuidString);
+        } catch (IllegalArgumentException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            request.getRequestDispatcher("/errors/400.html").forward(request, response);
+            return;
+        }
+        Optional<Match> match = matchesService.getMatch(uuid);
         if (match.isEmpty()) {
             match = Optional.ofNullable(matchesService.getFinishedMatch());
             if (match.isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                request.getRequestDispatcher("/errors/404.html").forward(request, response);
+                request.setAttribute("reason", "Match not found");
+                request.getRequestDispatcher("/errors/404.jsp").forward(request, response);
                 return;
             }
         }
@@ -39,8 +47,8 @@ public class MatchScoreController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UUID matchUUID = UUID.fromString(request.getParameter("uuid"));//TODO: empty/invalid UUID
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        UUID matchUUID = UUID.fromString(request.getParameter("uuid"));
         String winner = request.getParameter("winner");
         Match match = matchesService.getMatch(matchUUID, winner);
         MatchScoreCalculationService calculation = new MatchScoreCalculationService();

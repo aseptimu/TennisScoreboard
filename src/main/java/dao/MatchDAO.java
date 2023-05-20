@@ -16,7 +16,7 @@ import util.HibernateUtil;
 import java.util.List;
 import java.util.Optional;
 
-public class MatchDAO implements DAO<Match> {
+public class MatchDAO{
 
     public void create(Match match) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
@@ -46,26 +46,10 @@ public class MatchDAO implements DAO<Match> {
         session.getTransaction().commit();
     }
 
-    public Optional<Match> read(int id) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-//        Player player = session.get();
-//        String hql = "FROM Player WHERE name= :name";
-//        Query<Player> query = session.createQuery(hql, Player.class);
-//        query.setParameter("name", player.getName());
-//        Player presentedPlayer = query.uniqueResult();
-//        if (presentedPlayer == null) {
-//            session.persist(player);
-//        }
-        session.getTransaction().commit();
-        return Optional.empty();
-    }
-
     public List<Matches> getAll() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-//        session.beginTransaction();
+        session.beginTransaction();
 
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Matches> cq = cb.createQuery(Matches.class);
@@ -74,7 +58,19 @@ public class MatchDAO implements DAO<Match> {
 
         TypedQuery<Matches> allQuery = session.createQuery(all);
         List<Matches> resultList = allQuery.getResultList();
-//        session.getTransaction().commit();
+        session.getTransaction().commit();
         return resultList;
+    }
+
+    public Optional<Player> getPlayerByName(String name) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String queryString = "FROM Player WHERE name = :name";
+        Query<Player> query = session.createQuery(queryString, Player.class);
+        query.setParameter("name", name);
+        Player player = query.uniqueResult();
+        session.getTransaction().commit();
+        return Optional.ofNullable(player);
     }
 }

@@ -13,14 +13,14 @@
         }
 
         .content {
-            background-color: gray; /* Цвет содержимого страницы */
+            background-color: gray;
             padding: 20px;
         }
 
         .buttons {
             display: flex;
             justify-content: center;
-            gap: 10%;
+            gap: 1%;
         }
 
         table {
@@ -122,11 +122,11 @@
             <c:otherwise>
                 <form method="POST" action="/match-score?uuid=${match.uuid}">
                     <input type="hidden" name="winner" value="firstWon">
-                    <button type="submit">Первый выиграл</button>
+                    <button type="submit">игрок 1 выиграл текущее очко</button>
                 </form>
                 <form method="POST" action="/match-score?uuid=${match.uuid}">
                     <input type="hidden" name="winner" value="secondWon">
-                    <button type="submit">Второй выиграл</button>
+                    <button type="submit">игрок 2 выиграл текущее очко</button>
                 </form>
             </c:otherwise>
         </c:choose>
